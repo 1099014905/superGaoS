@@ -1,0 +1,22 @@
+FROM maven:3.9-eclipse-temurin-17-alpine AS build
+WORKDIR /app
+
+# Step 1: Cache dependencies - copy only POMs first
+COPY pom.xml .
+COPY supergaos-common/pom.xml supergaos-common/
+COPY supergaos-file/pom.xml supergaos-file/
+
+# Download dependencies (this layer caches until POMs change)
+RUN mvn dependency:go-offline -pl supergaos-file -am -B || true
+
+# Step 2: Copy source and build
+COPY supergaos-common/src supergaos-common/src/
+COPY supergaos-file/src supergaos-file/src/
+RUN mvn clean package -pl supergaos-file -am -DskipTests -B
+
+# Step 3: Runtime stage
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+COPY --from=build /app/supergaos-file/target/*.jar app.jar
+EXPOSE 9093
+ENTRYPOINT ["java", "-jar", "app.jar"]

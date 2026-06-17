@@ -24,7 +24,7 @@ public class UserService {
     public String login(LoginDTO dto) {
         User user = userMapper.findByUsername(dto.getUsername());
         if (user == null || !encoder.matches(dto.getPassword(), user.getPassword())) {
-            throw BusinessException.notFound(5, "用户名或密码错误");
+            throw new BusinessException(5001, "用户名或密码错误");
         }
         return jwtUtil.generateToken(user.getId());
     }

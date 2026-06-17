@@ -20,6 +20,9 @@ public class FileService {
     @Value("${minio.bucket}")
     private String bucket;
 
+    @Value("${minio.public-endpoint}")
+    private String publicEndpoint;
+
     public FileService(MinioClient minioClient, FileRecordMapper fileRecordMapper) {
         this.minioClient = minioClient;
         this.fileRecordMapper = fileRecordMapper;
@@ -39,7 +42,7 @@ public class FileService {
                     .contentType(file.getContentType())
                     .build());
 
-            String url = "http://localhost:9000/" + bucket + "/" + storagePath;
+            String url = publicEndpoint + "/" + bucket + "/" + storagePath;
 
             FileRecord record = new FileRecord();
             record.setOriginalName(originalName);

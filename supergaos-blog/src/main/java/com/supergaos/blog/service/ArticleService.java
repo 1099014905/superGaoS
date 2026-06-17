@@ -39,6 +39,14 @@ public class ArticleService {
             ArticleVO vo = toVO(a);
             vo.setCategories(categoryMapper.findByArticleId(a.getId()));
             vo.setTags(tagMapper.findByArticleId(a.getId()));
+            try {
+                Result<Integer> countResult = commentClient.getCommentCount(a.getId());
+                if (countResult != null && countResult.getData() != null) {
+                    vo.setCommentCount(countResult.getData());
+                }
+            } catch (Exception e) {
+                vo.setCommentCount(0);
+            }
             return vo;
         }).collect(Collectors.toList()));
         return result;

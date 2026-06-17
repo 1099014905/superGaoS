@@ -6,11 +6,13 @@ import com.supergaos.common.result.Result;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -26,15 +28,19 @@ import java.util.List;
 @Component
 public class JwtAuthGlobalFilter implements GlobalFilter, Ordered {
 
-    private static final List<String> WHITELIST = List.of(
+    private static final List<String> AUTH_REQUIRED_WHITELIST = List.of(
             "/api/user/login",
-            "/api/user/register",
+            "/api/user/register"
+    );
+
+    private static final List<String> GET_WHITELIST = List.of(
             "/api/blog/articles/**",
             "/api/comment/articles/**",
             "/api/file/**"
     );
 
-    private static final String SECRET = "YourSuperSecretKeyForJWTTokenGeneration2026BlogSystem";
+    @Value("${jwt.secret}")
+    private String jwtSecret;
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -42,15 +48,25 @@ public class JwtAuthGlobalFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         String path = request.getURI().getPath();
+        HttpMethod method = request.getMethod();
 
-        // Whitelist pass-through
-        boolean isWhitelisted = WHITELIST.stream()
+        // GET whitelist: public read-only access
+        if (method == HttpMethod.GET) {
+            boolean isGetWhitelisted = GET_WHITELIST.stream()
+                    .anyMatch(pattern -> pathMatcher.match(pattern, path));
+            if (isGetWhitelisted) {
+                return chain.filter(exchange);
+            }
+        }
+
+        // Auth-required whitelist: login/register (POST but need JWT check internally)
+        boolean isAuthRequired = AUTH_REQUIRED_WHITELIST.stream()
                 .anyMatch(pattern -> pathMatcher.match(pattern, path));
-        if (isWhitelisted) {
+        if (isAuthRequired) {
             return chain.filter(exchange);
         }
 
-        // Non-whitelist paths require JWT
+        // All other paths require JWT
         String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return unauthorized(exchange, "缺少 Token");
@@ -58,7 +74,7 @@ public class JwtAuthGlobalFilter implements GlobalFilter, Ordered {
 
         String token = authHeader.substring(7);
         try {
-            SecretKey key = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
+            SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
             Claims claims = Jwts.parser().verifyWith(key).build()
                     .parseSignedClaims(token).getPayload();
 

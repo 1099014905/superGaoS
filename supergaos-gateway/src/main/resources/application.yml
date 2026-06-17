@@ -1,3 +1,6 @@
+jwt:
+  secret: YourSuperSecretKeyForJWTTokenGeneration2026BlogSystem
+
 server:
   port: 9090
 

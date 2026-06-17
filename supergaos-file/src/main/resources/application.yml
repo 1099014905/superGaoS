@@ -26,3 +26,4 @@ minio:
   access-key: minioadmin
   secret-key: minioadmin
   bucket: supergaos-images
+  public-endpoint: http://localhost:9000

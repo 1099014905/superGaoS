@@ -33,5 +33,4 @@ spring:
           uri: lb://supergaos-user
           predicates:
             - Path=/api/user/**
-      default-filters:
-        - name: JwtAuth
+

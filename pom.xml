@@ -28,7 +28,7 @@
     <properties>
         <java.version>17</java.version>
         <spring-cloud.version>2023.0.1</spring-cloud.version>
-        <spring-cloud-alibaba.version>2023.0.1.0</spring-cloud.alibaba.version>
+        <spring-cloud-alibaba.version>2023.0.1.0</spring-cloud-alibaba.version>
         <mybatis.version>3.0.3</mybatis.version>
         <jjwt.version>0.12.5</jjwt.version>
     </properties>

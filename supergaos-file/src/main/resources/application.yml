@@ -1,0 +1,28 @@
+server:
+  port: 9093
+
+spring:
+  application:
+    name: supergaos-file
+  datasource:
+    url: jdbc:mysql://localhost:3306/supergaos_file?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: root123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+  servlet:
+    multipart:
+      max-file-size: 10MB
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.supergaos.file.entity
+
+minio:
+  endpoint: http://localhost:9000
+  access-key: minioadmin
+  secret-key: minioadmin
+  bucket: supergaos-images

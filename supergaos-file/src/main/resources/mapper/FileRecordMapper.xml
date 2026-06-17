@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supergaos.file.mapper.FileRecordMapper">
+    <resultMap id="baseMap" type="FileRecord">
+        <id column="id" property="id"/>
+        <result column="original_name" property="originalName"/>
+        <result column="storage_path" property="storagePath"/>
+        <result column="url" property="url"/>
+        <result column="file_size" property="fileSize"/>
+        <result column="mime_type" property="mimeType"/>
+        <result column="article_id" property="articleId"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO file_record (original_name, storage_path, url, file_size, mime_type, article_id)
+        VALUES (#{originalName}, #{storagePath}, #{url}, #{fileSize}, #{mimeType}, #{articleId})
+    </insert>
+    <select id="findById" resultMap="baseMap">
+        SELECT * FROM file_record WHERE id = #{id}
+    </select>
+    <delete id="deleteById">
+        DELETE FROM file_record WHERE id = #{id}
+    </delete>
+</mapper>

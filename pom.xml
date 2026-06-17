@@ -15,9 +15,9 @@
         <module>supergaos-user</module>
         <!-- TODO: Future modules
         <module>supergaos-blog</module>
-        <module>supergaos-comment</module>
         <module>supergaos-file</module>
         -->
+        <module>supergaos-comment</module>
     </modules>
 
     <parent>

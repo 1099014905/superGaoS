@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supergaos.blog.mapper.TagMapper">
+    <resultMap id="baseMap" type="Tag">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="baseMap">
+        SELECT * FROM tag
+    </select>
+
+    <select id="findById" resultMap="baseMap">
+        SELECT * FROM tag WHERE id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tag (name) VALUES (#{name})
+    </insert>
+
+    <select id="findByArticleId" resultType="string">
+        SELECT t.name FROM tag t JOIN article_tag at ON t.id = at.tag_id
+        WHERE at.article_id = #{articleId}
+    </select>
+</mapper>

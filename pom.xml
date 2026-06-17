@@ -13,8 +13,8 @@
         <module>supergaos-common</module>
         <module>supergaos-gateway</module>
         <module>supergaos-user</module>
-        <!-- TODO: Future modules
         <module>supergaos-blog</module>
+        <!-- TODO: Future modules
         <module>supergaos-file</module>
         -->
         <module>supergaos-comment</module>

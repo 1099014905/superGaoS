@@ -4,8 +4,10 @@ import com.supergaos.blog.dto.ArticleCreateDTO;
 import com.supergaos.blog.dto.ArticlePageVO;
 import com.supergaos.blog.dto.ArticleVO;
 import com.supergaos.blog.entity.*;
+import com.supergaos.blog.feign.CommentClient;
 import com.supergaos.blog.mapper.*;
 import com.supergaos.common.exception.BusinessException;
+import com.supergaos.common.result.Result;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -16,11 +18,14 @@ public class ArticleService {
     private final ArticleMapper articleMapper;
     private final CategoryMapper categoryMapper;
     private final TagMapper tagMapper;
+    private final CommentClient commentClient;
 
-    public ArticleService(ArticleMapper articleMapper, CategoryMapper categoryMapper, TagMapper tagMapper) {
+    public ArticleService(ArticleMapper articleMapper, CategoryMapper categoryMapper,
+                          TagMapper tagMapper, CommentClient commentClient) {
         this.articleMapper = articleMapper;
         this.categoryMapper = categoryMapper;
         this.tagMapper = tagMapper;
+        this.commentClient = commentClient;
     }
 
     public ArticlePageVO list(Integer status, int page, int size) {
@@ -45,6 +50,14 @@ public class ArticleService {
         ArticleVO vo = toVO(article);
         vo.setCategories(categoryMapper.findByArticleId(id));
         vo.setTags(tagMapper.findByArticleId(id));
+        try {
+            Result<Integer> countResult = commentClient.getCommentCount(id);
+            if (countResult != null && countResult.getData() != null) {
+                vo.setCommentCount(countResult.getData());
+            }
+        } catch (Exception e) {
+            vo.setCommentCount(0);
+        }
         return vo;
     }
 

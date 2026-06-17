@@ -1,10 +1,14 @@
 FROM maven:3.9-eclipse-temurin-17-alpine AS build
 WORKDIR /app
 
-# Step 1: Cache dependencies - copy only POMs first
+# Step 1: Cache dependencies - copy ALL POMs first (parent POM lists all modules)
 COPY pom.xml .
 COPY supergaos-common/pom.xml supergaos-common/
+COPY supergaos-gateway/pom.xml supergaos-gateway/
+COPY supergaos-user/pom.xml supergaos-user/
 COPY supergaos-blog/pom.xml supergaos-blog/
+COPY supergaos-comment/pom.xml supergaos-comment/
+COPY supergaos-file/pom.xml supergaos-file/
 
 # Download dependencies (this layer caches until POMs change)
 RUN mvn dependency:go-offline -pl supergaos-blog -am -B || true

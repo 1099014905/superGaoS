@@ -142,6 +142,7 @@ services:
       - "9090:9090"
     environment:
       SPRING_CLOUD_NACOS_DISCOVERY_SERVER_ADDR: nacos:8848
+      SPRING_CLOUD_NACOS_CONFIG_SERVER_ADDR: nacos:8848
       JWT_SECRET: YourSuperSecretKeyForJWTTokenGeneration2026BlogSystem
     depends_on:
       nacos:

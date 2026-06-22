@@ -5,9 +5,9 @@
                               http://maven.apache.org/xsd/settings-1.0.0.xsd">
     <mirrors>
         <mirror>
-            <id>tsinghua</id>
-            <name>Tsinghua University Mirror</name>
-            <url>https://mirrors.tuna.tsinghua.edu.cn/maven/</url>
+            <id>aliyun</id>
+            <name>Aliyun Maven Mirror</name>
+            <url>https://maven.aliyun.com/repository/public</url>
             <mirrorOf>central</mirrorOf>
         </mirror>
     </mirrors>

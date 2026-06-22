@@ -8,7 +8,7 @@ spring:
   application:
     name: supergaos-gateway
   config:
-    import: optional:nacos:  # Required by Spring Cloud Alibaba 2023.x
+    import: "optional:nacos:"  # Required by Spring Cloud Alibaba 2023.x
   cloud:
     nacos:
       discovery:

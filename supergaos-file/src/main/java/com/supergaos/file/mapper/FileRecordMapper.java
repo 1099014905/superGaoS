@@ -11,4 +11,6 @@ public interface FileRecordMapper {
     FileRecord findById(@Param("id") Long id);
 
     void deleteById(@Param("id") Long id);
+
+    void updateUrlById(@Param("id") Long id, @Param("url") String url);
 }

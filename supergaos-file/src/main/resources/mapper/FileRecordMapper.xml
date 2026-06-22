@@ -16,6 +16,9 @@
         INSERT INTO file_record (original_name, storage_path, url, file_size, mime_type, article_id)
         VALUES (#{originalName}, #{storagePath}, #{url}, #{fileSize}, #{mimeType}, #{articleId})
     </insert>
+    <update id="updateUrlById">
+        UPDATE file_record SET url = #{url} WHERE id = #{id}
+    </update>
     <select id="findById" resultMap="baseMap">
         SELECT * FROM file_record WHERE id = #{id}
     </select>

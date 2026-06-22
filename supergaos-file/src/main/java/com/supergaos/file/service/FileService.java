@@ -3,10 +3,14 @@ package com.supergaos.file.service;
 import com.supergaos.common.exception.BusinessException;
 import com.supergaos.file.entity.FileRecord;
 import com.supergaos.file.mapper.FileRecordMapper;
+import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,9 +23,6 @@ public class FileService {
 
     @Value("${minio.bucket}")
     private String bucket;
-
-    @Value("${minio.public-endpoint}")
-    private String publicEndpoint;
 
     public FileService(MinioClient minioClient, FileRecordMapper fileRecordMapper) {
         this.minioClient = minioClient;
@@ -42,16 +43,20 @@ public class FileService {
                     .contentType(file.getContentType())
                     .build());
 
-            String url = publicEndpoint + "/" + bucket + "/" + storagePath;
-
             FileRecord record = new FileRecord();
             record.setOriginalName(originalName);
             record.setStoragePath(storagePath);
-            record.setUrl(url);
+            record.setUrl("");
             record.setFileSize(file.getSize());
             record.setMimeType(file.getContentType());
             record.setArticleId(articleId);
             fileRecordMapper.insert(record);
+
+            // Update URL with the generated ID — a relative path through the gateway
+            String url = "/api/file/" + record.getId() + "/download";
+            record.setUrl(url);
+            fileRecordMapper.updateUrlById(record.getId(), url);
+
             return record;
         } catch (Exception e) {
             throw new BusinessException(4001, "文件上传失败: " + e.getMessage());
@@ -69,5 +74,22 @@ public class FileService {
         } catch (Exception ignored) {
         }
         fileRecordMapper.deleteById(id);
+    }
+
+    public ResponseEntity<InputStreamResource> download(Long id) {
+        FileRecord record = fileRecordMapper.findById(id);
+        if (record == null) throw BusinessException.notFound(4, "文件");
+        try {
+            var response = minioClient.getObject(GetObjectArgs.builder()
+                    .bucket(bucket)
+                    .object(record.getStoragePath())
+                    .build());
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(record.getMimeType()))
+                    .header("Content-Disposition", "inline; filename=\"" + record.getOriginalName() + "\"")
+                    .body(new InputStreamResource(response));
+        } catch (Exception e) {
+            throw new BusinessException(4002, "文件下载失败: " + e.getMessage());
+        }
     }
 }

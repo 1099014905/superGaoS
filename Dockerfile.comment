@@ -1,6 +1,9 @@
 FROM maven:3.9-eclipse-temurin-17-alpine AS build
 WORKDIR /app
 
+# Use Tsinghua Maven mirror for faster downloads in China
+COPY settings.xml /root/.m2/settings.xml
+
 # Step 1: Cache dependencies - copy ALL POMs first (parent POM lists all modules)
 COPY pom.xml .
 COPY supergaos-common/pom.xml supergaos-common/

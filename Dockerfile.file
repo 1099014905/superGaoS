@@ -19,7 +19,7 @@ RUN mvn dependency:go-offline -pl supergaos-file -am -B || true
 # Step 2: Copy source and build
 COPY supergaos-common/src supergaos-common/src/
 COPY supergaos-file/src supergaos-file/src/
-RUN mvn clean package -pl supergaos-file -am -DskipTests -B
+RUN mvn clean package -pl supergaos-file -am -DskipTests -B -U
 
 # Step 3: Runtime stage
 FROM eclipse-temurin:17-jre-alpine

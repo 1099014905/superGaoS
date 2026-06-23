@@ -42,8 +42,8 @@
               <td>
                 <span
                   class="badge"
-                  :class="article.status === 'published' ? 'badge-success' : 'badge-warning'"
-                >{{ article.status === 'published' ? '已发布' : '草稿' }}</span>
+                  :class="article.status === 2 ? 'badge-success' : 'badge-warning'"
+                >{{ article.status === 2 ? '已发布' : '草稿' }}</span>
               </td>
               <td class="table-count">{{ article.commentCount || 0 }}</td>
               <td class="table-date">{{ formatDate(article.createdAt) }}</td>

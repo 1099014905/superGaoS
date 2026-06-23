@@ -7,7 +7,19 @@
           <value>
             <TabSessionState>
               <option name="provider" value="claude" />
-              <option name="sessionId" value="ae5544c8-0cbe-4b03-b200-056d18190066" />
+              <option name="sessionId" value="57286793-6288-40ee-9ce1-70e1e3d6ef7e" />
+              <option name="cwd" value="$PROJECT_DIR$" />
+              <option name="model" value="claude-haiku-4-5" />
+              <option name="permissionMode" value="bypassPermissions" />
+              <option name="reasoningEffort" value="high" />
+            </TabSessionState>
+          </value>
+        </entry>
+        <entry key="1">
+          <value>
+            <TabSessionState>
+              <option name="provider" value="claude" />
+              <option name="sessionId" value="bb714e41-41f2-426c-a357-753d7c6cc9ed" />
               <option name="cwd" value="$PROJECT_DIR$" />
               <option name="model" value="claude-haiku-4-5" />
               <option name="permissionMode" value="bypassPermissions" />
@@ -17,5 +29,6 @@
         </entry>
       </map>
     </option>
+    <option name="tabCount" value="2" />
   </component>
 </project>

@@ -67,4 +67,4 @@ CREATE TABLE user (
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 -- 默认管理员，密码 admin123（BCrypt）
-INSERT INTO user (username, password, nickname) VALUES ('admin', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '管理员');
+INSERT INTO user (username, password, nickname) VALUES ('admin', '$2b$10$YkiAJsJlaoZ0JUBCugk4g.iXw89VJ3fGV64foMd/t2bJYvTIMGN9O', '管理员');

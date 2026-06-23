@@ -45,8 +45,8 @@
       <div class="form-group">
         <label class="form-label">状态</label>
         <select v-model="form.status" class="form-select">
-          <option value="draft">草稿</option>
-          <option value="published">发布</option>
+          <option :value="1">草稿</option>
+          <option :value="2">发布</option>
         </select>
       </div>
 
@@ -80,7 +80,7 @@ const form = reactive({
   title: '',
   summary: '',
   content: '',
-  status: 'draft'
+  status: 1
 })
 
 const loading = ref(false)
@@ -98,7 +98,7 @@ async function loadArticle() {
     form.title = article.title || ''
     form.summary = article.summary || ''
     form.content = article.content || ''
-    form.status = article.status || 'draft'
+    form.status = article.status || 1
   } catch (e) {
     loadError.value = e.response?.data?.message || e.message || '加载文章失败'
   } finally {

@@ -61,9 +61,9 @@ async function handleLogin() {
   submitting.value = true
   try {
     const res = await login(form.username, form.password)
-    // Extract token — gateway wraps response or token is directly in res
+    // Extract token — backend returns token as bare string in data field
     const data = res.data || res
-    const token = data.token || data.accessToken || data.access_token
+    const token = typeof data === 'string' ? data : (data.token || data.accessToken || data.access_token)
     if (!token) {
       throw new Error('登录响应中未找到 token')
     }

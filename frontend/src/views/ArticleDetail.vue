@@ -13,7 +13,7 @@
         <header class="article-header">
           <h1 class="article-title">{{ article.title }}</h1>
           <div class="article-meta">
-            <span class="article-date">{{ formatDate(article.createdAt) }}</span>
+            <span class="article-date">{{ formatDate(article.createTime) }}</span>
             <span v-if="article.categories && article.categories.length" class="article-categories">
               <span
                 v-for="cat in article.categories"
@@ -97,7 +97,7 @@
           >
             <div class="comment-header">
               <span class="comment-author">{{ comment.nickname || '匿名' }}</span>
-              <span class="comment-date">{{ formatDate(comment.createdAt) }}</span>
+              <span class="comment-date">{{ formatDate(comment.createTime) }}</span>
             </div>
             <p class="comment-content">{{ comment.content }}</p>
           </div>

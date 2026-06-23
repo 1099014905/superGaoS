@@ -28,7 +28,7 @@
           <h2 class="article-title">{{ article.title }}</h2>
           <p class="article-summary">{{ article.summary || '暂无摘要' }}</p>
           <div class="article-meta">
-            <span class="article-date">{{ formatDate(article.createdAt) }}</span>
+            <span class="article-date">{{ formatDate(article.createTime) }}</span>
             <span v-if="article.commentCount != null" class="article-comments">
               &#128172; {{ article.commentCount }} 条评论
             </span>
@@ -94,7 +94,7 @@ async function fetchArticles() {
     const res = await getArticles(currentPage.value, 10)
     // Handle different response shapes from the gateway
     const data = res.data || res
-    articles.value = data.records || data.list || []
+    articles.value = data.articles || data.records || data.list || []
     totalCount.value = data.total || 0
     totalPages.value = data.pages || Math.ceil(totalCount.value / 10) || 1
   } catch (e) {

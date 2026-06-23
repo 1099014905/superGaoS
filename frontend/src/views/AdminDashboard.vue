@@ -46,7 +46,7 @@
                 >{{ article.status === 2 ? '已发布' : '草稿' }}</span>
               </td>
               <td class="table-count">{{ article.commentCount || 0 }}</td>
-              <td class="table-date">{{ formatDate(article.createdAt) }}</td>
+              <td class="table-date">{{ formatDate(article.createTime) }}</td>
               <td class="table-actions">
                 <router-link
                   :to="`/admin/write/${article.id}`"
@@ -103,7 +103,7 @@ async function fetchArticles() {
   try {
     const res = await getArticles(currentPage.value, 10)
     const data = res.data || res
-    articles.value = data.records || data.list || []
+    articles.value = data.articles || data.records || data.list || []
     const total = data.total || 0
     totalPages.value = data.pages || Math.ceil(total / 10) || 1
   } catch (e) {

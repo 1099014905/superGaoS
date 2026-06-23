@@ -60,11 +60,11 @@ export function deleteArticle(id) {
 
 // ---- Comments ----
 export function getComments(articleId) {
-  return api.get('/comment/comments', { params: { articleId } })
+  return api.get('/comment/articles/' + articleId)
 }
 
 export function addComment(articleId, data) {
-  return api.post('/comment/comments', { ...data, articleId })
+  return api.post('/comment/articles/' + articleId, data)
 }
 
 // ---- File upload ----

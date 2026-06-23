@@ -34,6 +34,21 @@
 
       <div class="form-group">
         <label class="form-label">内容 (Markdown)</label>
+        <div class="editor-toolbar">
+          <button
+            type="button"
+            class="btn btn-outline btn-sm"
+            :disabled="uploading"
+            @click="triggerUpload"
+          >{{ uploading ? '上传中...' : '📷 上传图片' }}</button>
+          <input
+            ref="fileInput"
+            type="file"
+            accept="image/*"
+            style="display:none"
+            @change="handleFileUpload"
+          />
+        </div>
         <textarea
           v-model="form.content"
           class="form-textarea editor-area"
@@ -67,7 +82,7 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getArticle, createArticle, updateArticle } from '../api'
+import { getArticle, createArticle, updateArticle, uploadImage } from '../api'
 import LoadingSpinner from '../components/LoadingSpinner.vue'
 import ErrorMessage from '../components/ErrorMessage.vue'
 
@@ -87,6 +102,39 @@ const loading = ref(false)
 const loadError = ref('')
 const submitting = ref(false)
 const submitError = ref('')
+const uploading = ref(false)
+const fileInput = ref(null)
+
+function triggerUpload() {
+  fileInput.value?.click()
+}
+
+async function handleFileUpload(e) {
+  const file = e.target.files?.[0]
+  if (!file) return
+  uploading.value = true
+  try {
+    const res = await uploadImage(file)
+    const data = res.data || res
+    const url = data.url || data
+    const markdown = `![${file.name}](${url})`
+    const el = document.querySelector('.editor-area')
+    if (el) {
+      const start = el.selectionStart
+      const end = el.selectionEnd
+      form.content = form.content.substring(0, start) + markdown + form.content.substring(end)
+      el.focus()
+      el.selectionStart = el.selectionEnd = start + markdown.length
+    } else {
+      form.content += '\n' + markdown
+    }
+  } catch (e) {
+    submitError.value = '图片上传失败：' + (e.response?.data?.message || e.message)
+  } finally {
+    uploading.value = false
+    fileInput.value.value = ''
+  }
+}
 
 async function loadArticle() {
   if (!isEditing.value) return
@@ -164,6 +212,10 @@ onMounted(() => {
 
 .form-select {
   max-width: 200px;
+}
+
+.editor-toolbar {
+  margin-bottom: 0.5rem;
 }
 
 .form-error {

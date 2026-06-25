@@ -282,6 +282,15 @@ onMounted(() => {
   margin: 1rem 0;
 }
 
+.markdown-body :deep(video) {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  display: block;
+  margin: 1rem 0;
+  background: #000;
+}
+
 /* Comments */
 .comments-section {
   margin-top: 3rem;

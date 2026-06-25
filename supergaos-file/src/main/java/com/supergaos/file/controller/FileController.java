@@ -30,7 +30,8 @@ public class FileController {
     }
 
     @GetMapping("/{id}/download")
-    public ResponseEntity<InputStreamResource> download(@PathVariable Long id) {
-        return fileService.download(id);
+    public ResponseEntity<InputStreamResource> download(@PathVariable Long id,
+                                                         @RequestHeader(value = "Range", required = false) String rangeHeader) {
+        return fileService.download(id, rangeHeader);
     }
 }

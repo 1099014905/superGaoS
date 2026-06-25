@@ -2230,7 +2230,7 @@ public class BlogApplication {
 ```
 
 - [ ] **Step 2: 创建 CommentClient.java**
-
+  
 ```java
 package com.supergaos.blog.feign;
 

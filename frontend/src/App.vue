@@ -6,7 +6,10 @@
         <nav>
           <router-link to="/">首页</router-link>
           <router-link to="/login" v-if="!isLoggedIn">登录</router-link>
-          <a href="#" @click.prevent="logout" v-else>退出</a>
+          <template v-else>
+            <router-link to="/admin">管理</router-link>
+            <a href="#" @click.prevent="logout">退出</a>
+          </template>
         </nav>
       </div>
     </header>

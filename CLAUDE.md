@@ -64,7 +64,16 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
 
+## 5. No Unauthorized Commits
+
+**Never commit or push unless the user explicitly instructs you to.**
+- Stage, commit, and push only when told.
+- If you create files or make changes, leave them unstaged/uncommitted until asked.
+- The exception: the user says "fix this bug" and you need to demonstrate — still ask before committing.
+
 ---
+
+
 
 ## Project: superGaoS Blog
 

@@ -81,7 +81,8 @@ export function uploadVideo(file, onProgress) {
   formData.append('file', file)
   return api.post('/file/upload', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
-    onUploadProgress: onProgress
+    onUploadProgress: onProgress,
+    timeout: 600000
   })
 }
 

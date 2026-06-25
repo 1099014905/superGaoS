@@ -90,6 +90,7 @@
         </select>
       </div>
 
+      <p v-if="uploadError" class="form-error">{{ uploadError }}</p>
       <p v-if="submitError" class="form-error">{{ submitError }}</p>
 
       <div class="form-actions">
@@ -127,6 +128,7 @@ const loading = ref(false)
 const loadError = ref('')
 const submitting = ref(false)
 const submitError = ref('')
+const uploadError = ref('')
 const uploading = ref(false)
 const fileInput = ref(null)
 const videoFileInput = ref(null)
@@ -184,7 +186,7 @@ async function handleVideoUpload(e) {
     })
     const data = res.data || res
     const url = data.url || data
-    const videoTag = `<video src="${url}" controls preload="metadata" style="max-width:100%"></video>`
+    const videoTag = `<video src="${url}" controls preload="metadata" playsinline style="max-width:100%"></video>`
     const el = document.querySelector('.editor-area')
     if (el) {
       const start = el.selectionStart
@@ -196,7 +198,7 @@ async function handleVideoUpload(e) {
       form.content += '\n' + videoTag
     }
   } catch (e) {
-    submitError.value = '视频上传失败：' + (e.response?.data?.message || e.message)
+    uploadError.value = '视频上传失败：' + (e.response?.data?.message || e.message)
   } finally {
     uploading.value = false
     uploadProgress.value = 0

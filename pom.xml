@@ -15,6 +15,7 @@
         <module>supergaos-user</module>
         <module>supergaos-blog</module>
         <module>supergaos-file</module>
+        <module>supergaos-seckill</module>
         <module>supergaos-comment</module>
     </modules>
 

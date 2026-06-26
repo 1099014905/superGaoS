@@ -1,8 +1,9 @@
--- 创建四个数据库
+-- 创建五个数据库
 CREATE DATABASE IF NOT EXISTS supergaos_blog DEFAULT CHARACTER SET utf8mb4;
 CREATE DATABASE IF NOT EXISTS supergaos_comment DEFAULT CHARACTER SET utf8mb4;
 CREATE DATABASE IF NOT EXISTS supergaos_file DEFAULT CHARACTER SET utf8mb4;
 CREATE DATABASE IF NOT EXISTS supergaos_user DEFAULT CHARACTER SET utf8mb4;
+CREATE DATABASE IF NOT EXISTS supergaos_seckill DEFAULT CHARACTER SET utf8mb4;
 
 USE supergaos_blog;
 CREATE TABLE article (
@@ -68,3 +69,24 @@ CREATE TABLE user (
 );
 -- 默认管理员，密码 admin123（BCrypt）
 INSERT INTO user (username, password, nickname) VALUES ('admin', '$2b$10$YkiAJsJlaoZ0JUBCugk4g.iXw89VJ3fGV64foMd/t2bJYvTIMGN9O', '管理员');
+
+USE supergaos_seckill;
+CREATE TABLE seckill_activity (
+    id           BIGINT PRIMARY KEY AUTO_INCREMENT,
+    title        VARCHAR(200) NOT NULL COMMENT '活动标题',
+    price        DECIMAL(10,2) NOT NULL COMMENT '秒杀价',
+    stock        INT NOT NULL DEFAULT 0 COMMENT '总库存',
+    start_time   DATETIME NOT NULL COMMENT '开始时间',
+    end_time     DATETIME NOT NULL COMMENT '结束时间',
+    status       TINYINT DEFAULT 0 COMMENT '0:未开始 1:进行中 2:已结束',
+    create_time  DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE seckill_order (
+    id            BIGINT PRIMARY KEY AUTO_INCREMENT,
+    activity_id   BIGINT NOT NULL COMMENT '活动ID',
+    user_id       BIGINT NOT NULL COMMENT '用户ID',
+    amount        DECIMAL(10,2) NOT NULL COMMENT '实付金额',
+    status        TINYINT DEFAULT 0 COMMENT '0:待支付 1:已支付 2:已取消',
+    create_time   DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_activity_user (activity_id, user_id)
+);

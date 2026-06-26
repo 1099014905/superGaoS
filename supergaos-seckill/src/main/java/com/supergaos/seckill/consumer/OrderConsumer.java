@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.math.BigDecimal;
 import java.util.Map;
 
@@ -29,18 +28,13 @@ public class OrderConsumer {
         Long activityId = Long.valueOf(msg.get("activityId").toString());
         Long userId = Long.valueOf(msg.get("userId").toString());
         BigDecimal amount = new BigDecimal(msg.get("amount").toString());
-
-        // Deduct DB stock
         activityMapper.updateStock(activityId, -1);
-
-        // Create order
         SeckillOrder order = new SeckillOrder();
         order.setActivityId(activityId);
         order.setUserId(userId);
         order.setAmount(amount);
         order.setStatus(0);
         orderMapper.insert(order);
-
         log.info("秒杀订单创建成功: activityId={}, userId={}, orderId={}", activityId, userId, order.getId());
     }
 }

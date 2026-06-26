@@ -5,6 +5,8 @@ import ArticleDetail from '../views/ArticleDetail.vue'
 import Login from '../views/Login.vue'
 import AdminDashboard from '../views/AdminDashboard.vue'
 import WriteArticle from '../views/WriteArticle.vue'
+import SeckillList from '../views/SeckillList.vue'
+import SeckillOrders from '../views/SeckillOrders.vue'
 
 const routes = [
   {
@@ -42,7 +44,9 @@ const routes = [
     name: 'EditArticle',
     component: WriteArticle,
     meta: { title: '编辑文章', requiresAuth: true }
-  }
+  },
+  { path: '/seckill', name: 'SeckillList', component: SeckillList },
+  { path: '/seckill/orders', name: 'SeckillOrders', component: SeckillOrders, meta: { requiresAuth: true } },
 ]
 
 const router = createRouter({

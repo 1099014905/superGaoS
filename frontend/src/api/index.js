@@ -86,4 +86,21 @@ export function uploadVideo(file, onProgress) {
   })
 }
 
+// ---- Seckill ----
+export function getSeckillList() {
+  return api.get('/seckill/list')
+}
+
+export function getSeckillDetail(id) {
+  return api.get('/seckill/' + id)
+}
+
+export function grabSeckill(id) {
+  return api.post('/seckill/' + id + '/grab')
+}
+
+export function getSeckillOrders() {
+  return api.get('/seckill/orders')
+}
+
 export default api

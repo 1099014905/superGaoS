@@ -38,4 +38,8 @@ spring:
           uri: lb://supergaos-user
           predicates:
             - Path=/api/user/**
+        - id: seckill-service
+          uri: lb://supergaos-seckill
+          predicates:
+            - Path=/api/seckill/**
 

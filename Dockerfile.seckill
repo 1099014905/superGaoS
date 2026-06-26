@@ -1,0 +1,25 @@
+FROM maven:3.9-eclipse-temurin-17-alpine AS build
+WORKDIR /app
+
+# Use Tsinghua Maven mirror for faster downloads in China
+COPY settings.xml /root/.m2/settings.xml
+
+# Step 1: Cache dependencies - copy all POMs first (parent POM lists all modules)
+COPY pom.xml .
+COPY supergaos-common/pom.xml supergaos-common/
+COPY supergaos-seckill/pom.xml supergaos-seckill/
+
+# Download dependencies (this layer caches until POMs change)
+RUN mvn dependency:go-offline -pl supergaos-seckill -am -B || true
+
+# Step 2: Copy source and build
+COPY supergaos-common/src supergaos-common/src/
+COPY supergaos-seckill/src supergaos-seckill/src/
+RUN mvn clean package -pl supergaos-seckill -am -DskipTests -B -U
+
+# Step 3: Runtime stage
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+COPY --from=build /app/supergaos-seckill/target/*.jar app.jar
+EXPOSE 9095
+ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -11,6 +11,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
 
+import jakarta.annotation.PostConstruct;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +36,16 @@ public class SeckillService {
         this.redisTemplate = redisTemplate;
         this.seckillScript = seckillScript;
         this.rabbitTemplate = rabbitTemplate;
+    }
+
+    @PostConstruct
+    public void initStock() {
+        List<SeckillActivity> activities = activityMapper.findAll();
+        for (SeckillActivity a : activities) {
+            if (a.getStatus() == 1) { // 进行中
+                preloadStock(a.getId(), a.getStock());
+            }
+        }
     }
 
     public List<SeckillActivity> listActivities() {

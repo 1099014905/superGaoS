@@ -92,4 +92,12 @@ public class SeckillService {
     public List<SeckillOrder> getOrders(Long userId) {
         return orderMapper.findByUserId(userId);
     }
+
+    public void preloadStock(Long activityId, int stock) {
+        redisTemplate.opsForValue().set("seckill:stock:" + activityId, String.valueOf(stock));
+    }
+
+    public void clearUsers(Long activityId) {
+        redisTemplate.delete("seckill:users:" + activityId);
+    }
 }

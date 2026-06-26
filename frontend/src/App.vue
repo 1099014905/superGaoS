@@ -5,6 +5,7 @@
         <router-link to="/" class="logo">SuperGaoS Blog</router-link>
         <nav>
           <router-link to="/">首页</router-link>
+          <router-link to="/seckill">秒杀</router-link>
           <router-link to="/login" v-if="!isLoggedIn">登录</router-link>
           <template v-else>
             <router-link to="/admin">管理</router-link>

@@ -36,7 +36,8 @@ public class JwtAuthGlobalFilter implements GlobalFilter, Ordered {
     private static final List<String> GET_WHITELIST = List.of(
             "/api/blog/articles/**",
             "/api/comment/articles/**",
-            "/api/file/**"
+            "/api/file/**",
+            "/api/seckill/**"
     );
 
     @Value("${jwt.secret}")
